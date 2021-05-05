@@ -47,10 +47,11 @@ async def customers(response: Response):
             address += t[4] + " "
         if t[5] is not None:
             address += t[5]
+        address_striped = address.rstrip()
         dict_new = {
             "id": t[0],
             "name": t[1],
-            "full_address": address
+            "full_address": address_striped
         }
         customer_array.append(dict_new)
     response.status_code = status.HTTP_200_OK
