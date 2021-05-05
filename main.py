@@ -36,27 +36,26 @@ async def categories(response: Response):
 async def customers(response: Response):
     cursor = app.db_connection.cursor()
     customers = cursor.execute("SELECT CustomerID, CompanyName, Address, PostalCode, City, Country FROM Customers ORDER BY CustomerID asc").fetchall()
-    nowe = []
+    customer_array = []
     for t in customers:
         address = ""
         if t[2] is not None:
-            address += t[2]
+            address += t[2] + " "
         if t[3] is not None:
             address += t[3] + " "
         if t[4] is not None:
             address += t[4] + " "
         if t[5] is not None:
             address += t[5]
-        
         dict_new = {
             "id": t[0],
             "name": t[1],
             "full_address": address
         }
-        nowe.append(dict_new)
+        customer_array.append(dict_new)
     response.status_code = status.HTTP_200_OK
     return {
-        "customers": nowe
+        "customers": customer_array
     }
 
 
