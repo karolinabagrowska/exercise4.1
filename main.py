@@ -73,7 +73,7 @@ async def products(response: Response, id: int):
     else:
         response.status_code = status.HTTP_200_OK
     
-    # Other way to get id and name, longest
+    # Other way to get id and name, longer form
     #
     # new_product = {
     #     "id": product["ProductID"],
