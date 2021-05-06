@@ -67,13 +67,17 @@ async def customers(response: Response):
 @app.get("/products/{id}")
 async def products(response: Response, id: int):
     app.db_connection.row_factory = sqlite3.Row
-    product = app.db_connection.execute("SELECT ProductID, ProductName FROM Products WHERE ProductID = :id", {'id': id}).fetchone()
+    product = app.db_connection.execute("SELECT ProductID as id, ProductName as name FROM Products WHERE ProductID = :id", {'id': id}).fetchone()
     if product is None:
         raise HTTPException(status_code=404)
     else:
         response.status_code = status.HTTP_200_OK
-    new_dict = {
-        "id": product["ProductID"],
-        "name": product["ProductName"]
-    }
-    return new_dict
+    
+    # Other way to get id and name, longest
+    #
+    # new_product = {
+    #     "id": product["ProductID"],
+    #     "name": product["ProductName"]
+    # }
+    # return new_product
+    return product
