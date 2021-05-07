@@ -46,10 +46,16 @@ async def customers(response: Response):
         address = ""
         if t[2] is not None:
             address += t[2] + " "
+        else:
+            address += " "
         if t[3] is not None:
             address += t[3] + " "
+        else:
+            address += " "
         if t[4] is not None:
             address += t[4] + " "
+        else:
+            address += " "
         if t[5] is not None:
             address += t[5]
         address_striped = address.rstrip()
@@ -81,3 +87,7 @@ async def products(response: Response, id: int):
     # }
     # return new_product
     return product
+
+@app.get("/employess")
+async def employess(response: Response):
+    pass
