@@ -36,33 +36,70 @@ async def categories(response: Response):
         "categories": category_array
     }
 
+# Using SQL || easier way 
+# @app.get("/customers")
+# async def customers(response: Response):
+#     cursor = app.db_connection.cursor()
+#     customers = cursor.execute("SELECT CustomerID as id, CompanyName as name, Address || ' ' || PostalCode || ' ' || City || ' ' || Country as full_address FROM Customers ORDER BY CustomerID asc").fetchall()
+#     customer_array = []
+#     for t in customers:
+#         dict_new = {
+#             "id": t[0],
+#             "name": t[1],
+#             "full_address": t[2]
+#         }
+#         customer_array.append(dict_new)
+#     response.status_code = status.HTTP_200_OK
+#     return {
+#         "customers": customer_array
+#     }
 
 @app.get("/customers")
 async def customers(response: Response):
     cursor = app.db_connection.cursor()
-    customers = cursor.execute("SELECT CustomerID, CompanyName, Address, PostalCode, City, Country FROM Customers ORDER BY CustomerID asc").fetchall()
+    customers = cursor.execute("SELECT CustomerID, CompanyName, COALESCE(Address, ' ') address, COALESCE(PostalCode, ' ') postalcode, COALESCE(City, ' ') city, COALESCE(Country, ' ') country FROM Customers ORDER BY CustomerID asc").fetchall()
     customer_array = []
     for t in customers:
-        address = ""
-        if t[2] is not None:
-            address += t[2] + " "
-        if t[3] is not None:
-            address += t[3] + " "
-        if t[4] is not None:
-            address += t[4] + " "
-        if t[5] is not None:
-            address += t[5]
-        address_striped = address.rstrip()
+        address = t[2] + ' ' + t[3] + ' ' + t[4] + ' ' + t[5]
         dict_new = {
             "id": t[0],
             "name": t[1],
-            "full_address": address_striped
+            "full_address": address
         }
         customer_array.append(dict_new)
     response.status_code = status.HTTP_200_OK
     return {
         "customers": customer_array
     }
+
+
+# Using if with spaces to show address correctly
+# @app.get("/customers")
+# async def customers(response: Response):
+#     cursor = app.db_connection.cursor()
+#     customers = cursor.execute("SELECT CustomerID, CompanyName, Address, PostalCode, City, Country FROM Customers ORDER BY CustomerID asc").fetchall()
+#     customer_array = []
+#     for t in customers:
+#         address = ""
+#         if t[2] is not None:
+#             address += t[2] + " "
+#         if t[3] is not None:
+#             address += t[3] + " "
+#         if t[4] is not None:
+#             address += t[4] + " "
+#         if t[5] is not None:
+#             address += t[5]
+#         address_striped = address.rstrip()
+#         dict_new = {
+#             "id": t[0],
+#             "name": t[1],
+#             "full_address": address_striped
+#         }
+#         customer_array.append(dict_new)
+#     response.status_code = status.HTTP_200_OK
+#     return {
+#         "customers": customer_array
+#     }
 
 @app.get("/products/{id}")
 async def products(response: Response, id: int):
