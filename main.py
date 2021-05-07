@@ -120,7 +120,7 @@ async def products(response: Response, id: int):
     # return new_product
     return product
 
-@app.get("/employess")
+@app.get("/employees")
 async def employess(response: Response, limit: Optional [int]=None, offset: Optional [int]=None, order: Optional [str]=None):
     query = "SELECT EmployeeID as id, LastName as last_name, FirstName as first_name, City as city FROM Employees" 
     if order is None:
