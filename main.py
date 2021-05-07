@@ -142,4 +142,4 @@ async def employess(response: Response, limit: Optional [int]=None, offset: Opti
     app.db_connection.row_factory = sqlite3.Row
     employees = app.db_connection.execute(query).fetchall()
     response.status_code = status.HTTP_200_OK
-    return { "employees": employees, "limit": limit, "offset": offset, "order": order}
+    return { "employees": employees}
