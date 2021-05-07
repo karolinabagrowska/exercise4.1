@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi import Response, status
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse, JSONResponse
+from typing import Optional
 
 app = FastAPI()
 
@@ -120,5 +121,25 @@ async def products(response: Response, id: int):
     return product
 
 @app.get("/employess")
-async def employess(response: Response):
-    pass
+async def employess(response: Response, limit: Optional [int]=None, offset: Optional [int]=None, order: Optional [str]=None):
+    query = "SELECT EmployeeID as id, LastName as last_name, FirstName as first_name, City as city FROM Employees" 
+    if order is None:
+        query += " ORDER BY id"
+    elif order == "first_name":
+        query += " ORDER BY first_name"
+    elif order == "last_name":
+        query += " ORDER BY last_name"
+    elif order == "city":
+        query += " ORDER BY city"
+    else:
+        raise HTTPException(status_code=400)
+
+    if limit is not None:
+        query += " LIMIT " + str(limit)
+    if offset is not None and limit is not None:
+        query += " OFFSET " + str(offset)
+ 
+    app.db_connection.row_factory = sqlite3.Row
+    employees = app.db_connection.execute(query).fetchall()
+    response.status_code = status.HTTP_200_OK
+    return { "employees": employees, "limit": limit, "offset": offset, "order": order}
