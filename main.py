@@ -143,3 +143,12 @@ async def employess(response: Response, limit: Optional [int]=None, offset: Opti
     employees = app.db_connection.execute(query).fetchall()
     response.status_code = status.HTTP_200_OK
     return { "employees": employees}
+
+@app.get("/products_extended")
+async def products_extended(response: Response):
+    pass
+    # app.db_connection.row_factory = sqlite3.Row
+    # data = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products
+    # ''').fetchall()
+    # response.status_code = status.HTTP_200_OK
+    
