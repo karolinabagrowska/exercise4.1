@@ -148,7 +148,8 @@ async def employess(response: Response, limit: Optional [int]=None, offset: Opti
 async def products_extended(response: Response):
     pass
     # app.db_connection.row_factory = sqlite3.Row
-    # data = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products
+    # products_extended = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products
     # ''').fetchall()
     # response.status_code = status.HTTP_200_OK
+    # return {"products_extended": products_extended}
     
