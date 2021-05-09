@@ -58,7 +58,7 @@ async def categories(response: Response):
 @app.get("/customers")
 async def customers(response: Response):
     cursor = app.db_connection.cursor()
-    customers = cursor.execute("SELECT CustomerID, CompanyName, COALESCE(Address, ' ') address, COALESCE(PostalCode, ' ') postalcode, COALESCE(City, ' ') city, COALESCE(Country, ' ') country FROM Customers ORDER BY CustomerID asc").fetchall()
+    customers = cursor.execute("SELECT CustomerID, CompanyName, COALESCE(Address, ' ') address, COALESCE(PostalCode, ' ') postalcode, COALESCE(City, ' ') city, COALESCE(Country, ' ') country FROM Customers ORDER BY UPPER(CustomerID) asc").fetchall()
     customer_array = []
     for t in customers:
         address = t[2] + ' ' + t[3] + ' ' + t[4] + ' ' + t[5]
@@ -148,8 +148,7 @@ async def employess(response: Response, limit: Optional [int]=None, offset: Opti
 async def products_extended(response: Response):
     pass
     # app.db_connection.row_factory = sqlite3.Row
-    # products_extended = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products
+    # products_extended = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products ORDER BY id
     # ''').fetchall()
     # response.status_code = status.HTTP_200_OK
     # return {"products_extended": products_extended}
-    
