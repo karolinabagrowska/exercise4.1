@@ -146,9 +146,8 @@ async def employess(response: Response, limit: Optional [int]=None, offset: Opti
 
 @app.get("/products_extended")
 async def products_extended(response: Response):
-    pass
-    # app.db_connection.row_factory = sqlite3.Row
-    # products_extended = app.db_connection.execute('''SELECT Products.ProductID as id FROM Products ORDER BY id
-    # ''').fetchall()
-    # response.status_code = status.HTTP_200_OK
-    # return {"products_extended": products_extended}
+     app.db_connection.row_factory = sqlite3.Row
+     products_extended = app.db_connection.execute('''SELECT Products.ProductID as id, Products.ProductName as name, Categories.CategoryName as category, Suppliers.CompanyName as supplier FROM Products JOIN Categories ON Products.CategoryID  = Categories.CategoryID JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID ORDER BY id
+     ''').fetchall()
+     response.status_code = status.HTTP_200_OK
+     return {"products_extended": products_extended}
