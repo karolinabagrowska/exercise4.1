@@ -151,3 +151,16 @@ async def products_extended(response: Response):
      ''').fetchall()
      response.status_code = status.HTTP_200_OK
      return {"products_extended": products_extended}
+
+@app.get("/products/{id}/orders")
+async def products_id_orders(response: Response, id: int):
+    app.db_connection.row_factory = sqlite3.Row
+    count_id = app.db_connection.execute(f"SELECT COUNT(*) as count FROM Products WHERE ProductID = {id}").fetchone()
+    #return count_id
+    if count_id['count'] == 1:
+        app.db_connection.row_factory = sqlite3.Row
+        products_id = app.db_connection.execute("SELECT Orders.OrderID as id, Customers.CompanyName as customer, od.Quantity as quantity, ROUND((od.UnitPrice * quantity) - (od.Discount * (od.UnitPrice * quantity)), 2) as total_price FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN 'Order Details' od ON Orders.OrderID = od.OrderID ORDER BY id ", {'id': id}).fetchone()
+        response.status_code = status.HTTP_200_OK
+    else:
+        raise HTTPException(status_code=404)
+    return products_id
