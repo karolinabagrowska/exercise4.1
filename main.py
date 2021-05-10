@@ -163,4 +163,4 @@ async def products_id_orders(response: Response, id: int):
         response.status_code = status.HTTP_200_OK
     else:
         raise HTTPException(status_code=404)
-    return products_id
+    return {"orders": products_id}
