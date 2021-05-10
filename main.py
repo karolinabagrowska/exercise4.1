@@ -159,7 +159,7 @@ async def products_id_orders(response: Response, id: int):
     #return count_id
     if count_id['count'] == 1:
         app.db_connection.row_factory = sqlite3.Row
-        products_id = app.db_connection.execute("SELECT Orders.OrderID as id, Customers.CompanyName as customer, od.Quantity as quantity, ROUND((od.UnitPrice * quantity) - (od.Discount * (od.UnitPrice * quantity)), 2) as total_price FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN 'Order Details' od ON Orders.OrderID = od.OrderID ORDER BY id ", {'id': id}).fetchone()
+        products_id = app.db_connection.execute(f"SELECT Orders.OrderID as id, Customers.CompanyName as customer, od.Quantity as quantity, ROUND((od.UnitPrice * quantity) - (od.Discount * (od.UnitPrice * quantity)), 2) as total_price FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN 'Order Details' od ON Orders.OrderID = od.OrderID WHERE od.ProductID = {id} ORDER BY id ", {'id': id}).fetchall()
         response.status_code = status.HTTP_200_OK
     else:
         raise HTTPException(status_code=404)
