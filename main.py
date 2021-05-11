@@ -207,5 +207,5 @@ async def delete_categories_id(response: Response, id: int):
     cursor = app.db_connection.execute(f"DELETE FROM Categories WHERE CategoryID = {id}").fetchone()
     app.db_connection.commit()
     response.status_code = status.HTTP_200_OK
-    return {'deleted': id}
+    return {'deleted': 1}
     
